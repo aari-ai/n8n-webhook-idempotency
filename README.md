@@ -1,5 +1,9 @@
 # Prevent duplicate webhook executions in n8n
 
+[![n8n template](https://img.shields.io/badge/n8n-template-EA4B71)](https://api.getaari.com/n8n-template)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![Free API key](https://img.shields.io/badge/AARI-free%20API%20key-5b7cf8)](https://api.getaari.com/n8n)
+
 ![n8n workflow](assets/n8n-workflow.png)
 
 Webhook providers use **at-least-once delivery**. If a request times out or fails, the provider retries — and your workflow executes twice. The same Stripe charge runs again. The same confirmation email goes out again.
