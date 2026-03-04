@@ -1,16 +1,16 @@
 # Prevent duplicate webhook executions in n8n
 
+![n8n workflow](assets/n8n-workflow.png)
+
 Webhook providers use **at-least-once delivery**. If a request times out or fails, the provider retries — and your workflow executes twice. The same Stripe charge runs again. The same confirmation email goes out again.
 
 This template adds an idempotency gate before any side effect. The first event goes through. Retries are caught and stopped.
-
-![n8n workflow](assets/n8n-workflow.png)
 
 ---
 
 ## Import workflow
 
-Download and import into n8n — no manual configuration needed after import:
+Download and import into n8n — expressions evaluate automatically, no manual configuration after import:
 
 **[⬇ Download n8n workflow](https://api.getaari.com/n8n-template)**
 
@@ -18,30 +18,11 @@ Or from this repo: [`workflows/prevent-duplicate-webhook-executions.json`](workf
 
 ---
 
-## How it works
-
-```
-Incoming webhook → AARI gate → Duplicate? → ALLOW → your action → report SUCCESS
-                                           ↘ BLOCK → stop
-```
-
-1. The AARI gate checks the event's idempotency key against a 24-hour window.
-2. First seen → `ALLOW` → your action runs → outcome recorded as `SUCCESS`.
-3. Retry → `BLOCK` → workflow stops → outcome recorded as `BLOCKED`.
-
-The Webhook node uses **Respond immediately** — `200 OK` goes back to the provider before the workflow runs. No retry loops caused by slow execution.
-
----
-
 ## Quick start (2 minutes)
 
-**1. Import the workflow**
+**1. Import the workflow** — [download here](https://api.getaari.com/n8n-template)
 
-[Download the template](https://api.getaari.com/n8n-template) and import it into n8n.
-
-**2. Get a free AARI API key**
-
-[https://api.getaari.com/n8n](https://api.getaari.com/n8n) — free, 2,500 gate calls/month, no credit card.
+**2. Get a free AARI API key** — [https://api.getaari.com/n8n](https://api.getaari.com/n8n) · free · 2,500 gate calls/month · no credit card
 
 **3. Create a credential in n8n**
 
@@ -53,7 +34,22 @@ Select it in the **AARI idempotency gate** node.
 
 **4. Connect your action**
 
-Replace the **✅ Run your action here** node with your real action — Stripe charge, send email, DB insert, API call.
+Replace **✅ Run your action here** with your real action — Stripe charge, send email, DB insert, API call.
+
+---
+
+## How it works
+
+```
+Incoming webhook → AARI gate → Duplicate? → ALLOW → your action → report SUCCESS
+                                           ↘ BLOCK → stop
+```
+
+1. The AARI gate checks the event's idempotency key against a 24-hour window.
+2. First seen → `ALLOW` → action runs → outcome recorded as `SUCCESS`.
+3. Retry → `BLOCK` → workflow stops → outcome recorded as `BLOCKED`.
+
+The Webhook node uses **Respond immediately** — `200 OK` goes back to the provider before the workflow runs. No retry loops caused by slow execution.
 
 ---
 
@@ -72,15 +68,18 @@ The fallback chain: `body.id` → `event_id` → `eventId` → `webhook_id` → 
 
 ---
 
-## What you see in the dashboard
+## What happens when a duplicate event arrives
+
+The first event is allowed through. The retry is blocked before any side effect runs.
+
+![AARI dashboard duplicate blocked](assets/aari_n8n_dashboard.png)
 
 | Event | Decision | Outcome |
 |-------|----------|---------|
 | First delivery | ALLOW | SUCCESS |
 | Retry / duplicate | BLOCK | BLOCKED |
-| 0 PENDING in normal runs | | |
 
-Dashboard: [https://api.getaari.com/dashboard](https://api.getaari.com/dashboard)
+Zero PENDING in normal runs.
 
 ---
 
