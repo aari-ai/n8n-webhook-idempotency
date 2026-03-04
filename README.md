@@ -21,6 +21,11 @@ Download and import into n8n — expressions evaluate automatically, no manual c
 
 Or from this repo: [`workflows/prevent-duplicate-webhook-executions.json`](workflows/prevent-duplicate-webhook-executions.json)
 
+**Direct raw JSON** (import without downloading):
+```
+https://raw.githubusercontent.com/aari-ai/n8n-webhook-idempotency/main/workflows/prevent-duplicate-webhook-executions.json
+```
+
 ---
 
 ## Quick start (2 minutes)
@@ -46,8 +51,17 @@ Replace **✅ Run your action here** with your real action — Stripe charge, se
 ## How it works
 
 ```
-Incoming webhook → AARI gate → Duplicate? → ALLOW → your action → report SUCCESS
-                                           ↘ BLOCK → stop
+Webhook provider
+      │
+      ▼
+ n8n Webhook node  ──── responds 200 OK immediately (no retry loops)
+      │
+      ▼
+ AARI Gate API  ◄──── checks key against Redis (24h window)
+      │
+      ├── first seen ──► ALLOW ──► your action ──► report SUCCESS
+      │
+      └── duplicate  ──► BLOCK ──► workflow stops ──► report BLOCKED
 ```
 
 1. The AARI gate checks the event's idempotency key against a 24-hour window.
@@ -85,6 +99,16 @@ The first event is allowed through. The retry is blocked before any side effect 
 | Retry / duplicate | BLOCK | BLOCKED |
 
 Zero PENDING in normal runs.
+
+---
+
+## Why not just use the Remove Duplicates node?
+
+n8n's built-in Remove Duplicates node only deduplicates **within a single execution**.
+
+Webhook retries arrive as **new executions** — the Remove Duplicates node has no memory of the previous run. By the time the retry lands, the first execution is already gone.
+
+This template stores the idempotency key **externally** (24-hour Redis window), so retries are caught before any side effect runs — regardless of execution boundaries.
 
 ---
 
