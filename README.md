@@ -4,6 +4,18 @@ Webhook providers use **at-least-once delivery**. If a request times out or fail
 
 This template adds an idempotency gate before any side effect. The first event goes through. Retries are caught and stopped.
 
+![n8n workflow](assets/n8n-workflow.png)
+
+---
+
+## Import workflow
+
+Download and import into n8n — no manual configuration needed after import:
+
+**[⬇ Download n8n workflow](https://api.getaari.com/n8n-template)**
+
+Or from this repo: [`workflows/prevent-duplicate-webhook-executions.json`](workflows/prevent-duplicate-webhook-executions.json)
+
 ---
 
 ## How it works
@@ -25,9 +37,7 @@ The Webhook node uses **Respond immediately** — `200 OK` goes back to the prov
 
 **1. Import the workflow**
 
-Download [`workflows/prevent-duplicate-webhook-executions.json`](workflows/prevent-duplicate-webhook-executions.json) and import it into n8n.
-
-Or download directly: [https://api.getaari.com/n8n-template](https://api.getaari.com/n8n-template)
+[Download the template](https://api.getaari.com/n8n-template) and import it into n8n.
 
 **2. Get a free AARI API key**
 
@@ -85,6 +95,12 @@ Stripe · GitHub · Shopify · WooCommerce · any webhook provider using at-leas
 - [n8n quickstart](docs/n8n-quickstart.md)
 - [Choosing idempotency keys](docs/idempotency-keys.md)
 - [API reference](https://api.getaari.com/docs#n8n)
+
+---
+
+## Keywords
+
+n8n webhook duplicate · n8n idempotency · prevent duplicate workflow execution · webhook retries n8n · stripe webhook duplicate · n8n webhook runs twice · at-least-once delivery n8n · n8n deduplication · shopify webhook duplicate · github webhook duplicate
 
 ---
 
