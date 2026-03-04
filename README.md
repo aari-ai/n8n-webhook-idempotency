@@ -133,3 +133,7 @@ n8n webhook duplicate · n8n idempotency · prevent duplicate workflow execution
 ---
 
 **Get a free key + import workflow: [https://api.getaari.com/n8n](https://api.getaari.com/n8n)**
+
+---
+
+⭐ If this template saved you from a duplicate webhook execution, consider starring the repo — it helps others find it.
