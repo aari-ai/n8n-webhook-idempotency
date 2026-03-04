@@ -1,0 +1,45 @@
+name: Validate workflow JSON
+
+on:
+  push:
+    paths:
+      - 'workflows/*.json'
+  pull_request:
+    paths:
+      - 'workflows/*.json'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate JSON syntax
+        run: |
+          for f in workflows/*.json; do
+            echo "Checking $f..."
+            python3 -c "import json; json.load(open('$f'))" && echo "  valid JSON ✓"
+          done
+
+      - name: Check no hardcoded API keys
+        run: |
+          if grep -r "sk_aari\|X-API-Key.*sk_" workflows/; then
+            echo "ERROR: hardcoded API key found"
+            exit 1
+          fi
+          echo "No hardcoded keys ✓"
+
+      - name: Check responseMode is onReceived
+        run: |
+          python3 - << 'EOF'
+          import json, sys, glob
+          for path in glob.glob("workflows/*.json"):
+              data = json.load(open(path))
+              for node in data.get("nodes", []):
+                  if node.get("type") == "n8n-nodes-base.webhook":
+                      mode = node.get("parameters", {}).get("responseMode", "")
+                      if mode != "onReceived":
+                          print(f"ERROR: {path} webhook responseMode is '{mode}', expected 'onReceived'")
+                          sys.exit(1)
+              print(f"{path}: responseMode=onReceived ✓")
+          EOF
