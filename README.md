@@ -1,7 +1,7 @@
 # Prevent duplicate webhook executions in n8n
 
 [![GitHub stars](https://img.shields.io/github/stars/aari-ai/n8n-webhook-idempotency?style=social)](https://github.com/aari-ai/n8n-webhook-idempotency)
-[![n8n template](https://img.shields.io/badge/n8n-template-EA4B71)](https://creators.n8n.io/workflows/13863)
+[![n8n template](https://img.shields.io/badge/n8n-template-EA4B71)](https://api.getaari.com/n8n-template)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 [![Free API key](https://img.shields.io/badge/AARI-free%20API%20key-5b7cf8)](https://api.getaari.com/n8n)
 
@@ -17,7 +17,7 @@ This template adds an idempotency gate before any side effect. The first event g
 
 Download and import into n8n — expressions evaluate automatically, no manual configuration after import:
 
-**[⬇ Download n8n workflow](https://creators.n8n.io/workflows/13863)** — official n8n template library
+**[⬇ Download n8n workflow](https://api.getaari.com/n8n-template)**
 
 Or from this repo: [`workflows/prevent-duplicate-webhook-executions.json`](workflows/prevent-duplicate-webhook-executions.json)
 
